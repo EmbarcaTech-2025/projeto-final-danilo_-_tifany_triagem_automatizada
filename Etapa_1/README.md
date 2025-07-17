@@ -1,5 +1,4 @@
 
----
 # 🩺 Projeto Final da Fase 2 – Cabine de Triagem Automatizada
 
 Autor: **Danilo Oliverira e Tifany Severo**
@@ -80,12 +79,5 @@ Casos de sucesso como Johns Hopkins e Hospital Santa Rita mostraram reduções d
 
 ---
 
-## 👥 Autores
-
-- Danilo Oliveira  
-- Tífany Severo
-
-
----
 
 
