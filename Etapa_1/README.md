@@ -1,7 +1,7 @@
 
 # 🩺 Projeto Final da Fase 2 – Cabine de Triagem Automatizada
 
-Autor: **Danilo Oliverira e Tifany Severo**
+Autor: **Danilo Oliveira e Tifany Severo**
 
 Curso: Residência Tecnológica em Sistemas Embarcados
 
