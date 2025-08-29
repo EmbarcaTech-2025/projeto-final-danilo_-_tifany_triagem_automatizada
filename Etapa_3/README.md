@@ -65,4 +65,4 @@ Com base nos desafios enfrentados, algumas melhorias já foram definidas para as
 
 Essas melhorias consolidam o potencial do projeto não apenas como prova de conceito, mas como uma solução prática, escalável e aplicável em diferentes cenários de atendimento em saúde.
 
-[▶️ Assista ao vídeo demonstrativo](./Video_prototipo.mp4)
+[▶️ Assista ao vídeo demonstrativo](https://drive.google.com/file/d/1ad5l-kcSVqgPj8-EoTbIk1vcw9W2u77N/view?usp=sharing)
