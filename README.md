@@ -38,7 +38,7 @@ A solução é um ecossistema integrado composto por três módulos principais:
 
 A interação entre os módulos garante um fluxo de dados contínuo e resiliente, desde a entrada do paciente na cabine até o registro final no prontuário eletrônico.
 
-![Diagrama de Blocos Funcionais](./assets/Diagrama_De_blocos_funcionais.png)
+![Diagrama de Blocos Funcionais](./Assets/Diagrama_De_blocos_funcionais.png)
 *Figura 1 – Diagrama de Blocos Funcionais do Sistema*
 
 -----
@@ -93,8 +93,8 @@ A estrutura do projeto foi pensada para ser modular e escalável, separando as r
 |
 |-- 📂 dashboard/                # Código fonte da aplicação web da Estação de Enfermagem
 |   |-- index.html
-|   |-- assets/css/style.css
-|   `-- assets/js/script.js
+|   |-- Assets/css/style.css
+|   `-- Assets/js/script.js
 |
 |-- 📂 doc/                      # Documentação do projeto
 |
@@ -162,12 +162,12 @@ Após a compilação, o arquivo `triagem.uf2` estará disponível dentro da past
 
 ### Protótipo Final
 
-![Protótipo final da cabine de triagem](./assets/prototipo.png)
+![Protótipo final da cabine de triagem](./Assets/prototipo.png)
 *Figura 2 – Protótipo final da cabine de triagem*
 
 ### Dashboard em Operação
 
-![Protótipo final da cabine de triagem](./assets/dashboard.jpeg)
+![Protótipo final da cabine de triagem](./Assets/dashboard.jpeg)
 *Figura 3 – Dashboard exibindo dados do paciente em tempo real*
 
 ### Demonstração em Vídeo
@@ -181,3 +181,4 @@ Após a compilação, o arquivo `triagem.uf2` estará disponível dentro da past
 Este projeto foi desenvolvido para fins educacionais no âmbito do programa de Residência EmbarcaTech.
 
 Licença: **GNU GPL-3.0**.
+
