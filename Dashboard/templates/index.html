@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <title>Dashboard de Triagem</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <style>
+    body { background: #0f172a; color: #e2e8f0; }
+    .title { color: #f8fafc; }
+    .cabine-card {
+      background:#111827; border:1px solid #1f2937; border-radius:16px;
+      padding:16px; box-shadow:0 10px 20px rgba(0,0,0,.15);
+    }
+    .badge-soft { background:#1f2937; color:#cbd5e1; }
+    .metric { font-weight:700; font-size:1.05rem; }
+    .critical { border-color:#ef4444; box-shadow:0 0 0 2px #ef44444d; }
+    .ok { border-color:#10b98133; }
+    .chip { padding:4px 10px; border-radius:999px; background:#1f2937; color:#e5e7eb; font-size:.8rem; }
+    .muted { color:#94a3b8; }
+    .card-recente { background:#0b1220; border:1px solid #1f2937; border-radius:12px; padding:12px; }
+    .grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:16px; }
+    @media (max-width: 992px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="title fw-bold">Dashboard de Triagem</h1>
+      <span class="chip">Online</span>
+    </div>
+
+    <h5 class="muted mb-2">Cabines</h5>
+    <div class="grid" id="grid-cabines">
+      {% for cab in cabines %}
+        {% set p = ultimo[cab] %}
+        <div class="cabine-card {% if p %}{% if (p.temperatura|float)>=38.0 or (p.spo2|int)<93 or (p.bpm|int)>120 %}critical{% else %}ok{% endif %}{% endif %}" id="card-{{ cab|replace(' ', '-') }}">
+          <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-1">{{ cab }}</h4>
+            <span class="badge badge-soft">{{ p.timestamp if p else "—" }}</span>
+          </div>
+          <div class="mt-2">
+            {% if p %}
+              <div class="mb-1"><span class="muted">Paciente:</span> <b>{{ p.nome }}</b></div>
+              <div class="mb-1"><span class="muted">CPF:</span> {{ p.cpf }}</div>
+              <div class="mb-2"><span class="muted">Sintomas:</span> {{ p.sintomas }}</div>
+              <div class="row g-2">
+                <div class="col"><div class="metric">BPM: {{ p.bpm }}</div></div>
+                <div class="col"><div class="metric">SpO₂: {{ p.spo2 }}%</div></div>
+                <div class="col"><div class="metric">Temp: {{ "%.2f"|format(p.temperatura|float) }}°C</div></div>
+              </div>
+              <div class="row g-2 mt-1">
+                <div class="col"><div>PA: {{ p.pressao_sys }}/{{ p.pressao_dia }} mmHg</div></div>
+                <div class="col"><div>Dist: {{ p.distancia }} mm</div></div>
+                <div class="col"><div class="muted">De: {{ p.ip_origem }}</div></div>
+              </div>
+            {% else %}
+              <div class="muted">Aguardando paciente…</div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-5 mb-2">
+      <h5 class="muted mb-0">Recebidos Recentemente</h5>
+    </div>
+    <div class="row" id="lista-recentes">
+      {% for p in recentes %}
+      <div class="col-12 col-lg-6 mb-3">
+        <div class="card-recente">
+          <div class="d-flex justify-content-between">
+            <div><b>{{ p.nome }}</b> <span class="muted">({{ p.cpf }})</span></div>
+            <div class="chip">{{ p.cabine }}</div>
+          </div>
+          <div class="muted">{{ p.sintomas }}</div>
+          <div class="mt-1">
+            <span class="me-3">BPM: <b>{{ p.bpm }}</b></span>
+            <span class="me-3">SpO₂: <b>{{ p.spo2 }}%</b></span>
+            <span class="me-3">Temp: <b>{{ "%.2f"|format(p.temperatura|float) }}°C</b></span>
+            <span>PA: <b>{{ p.pressao_sys }}/{{ p.pressao_dia }}</b></span>
+          </div>
+          <div class="muted mt-1">{{ p.timestamp }} · {{ p.ip_origem }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <script>
+    const socket = io();
+
+    function renderCabine(p) {
+      const id = `card-${p.cabine.replaceAll(' ', '-')}`;
+      const el = document.getElementById(id);
+      if (!el) return;
+      const critical = (Number(p.temperatura) >= 38.0) || (Number(p.spo2) < 93) || (Number(p.bpm) > 120);
+      el.classList.remove('critical','ok');
+      el.classList.add(critical ? 'critical' : 'ok');
+      el.innerHTML = `
+        <div class="d-flex justify-content-between align-items-center">
+          <h4 class="mb-1">${p.cabine}</h4>
+          <span class="badge badge-soft">${p.timestamp || "—"}</span>
+        </div>
+        <div class="mt-2">
+          <div class="mb-1"><span class="muted">Paciente:</span> <b>${p.nome}</b></div>
+          <div class="mb-1"><span class="muted">CPF:</span> ${p.cpf}</div>
+          <div class="mb-2"><span class="muted">Sintomas:</span> ${p.sintomas}</div>
+          <div class="row g-2">
+            <div class="col"><div class="metric">BPM: ${p.bpm}</div></div>
+            <div class="col"><div class="metric">SpO₂: ${p.spo2}%</div></div>
+            <div class="col"><div class="metric">Temp: ${Number(p.temperatura).toFixed(2)}°C</div></div>
+          </div>
+          <div class="row g-2 mt-1">
+            <div class="col"><div>PA: ${p.pressao_sys}/${p.pressao_dia} mmHg</div></div>
+            <div class="col"><div>Dist: ${p.distancia} mm</div></div>
+            <div class="col"><div class="muted">De: ${p.ip_origem || ""}</div></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function prependRecente(p) {
+      const lista = document.getElementById('lista-recentes');
+      const item = document.createElement('div');
+      item.className = 'col-12 col-lg-6 mb-3';
+      item.innerHTML = `
+        <div class="card-recente">
+          <div class="d-flex justify-content-between">
+            <div><b>${p.nome}</b> <span class="muted">(${p.cpf})</span></div>
+            <div class="chip">${p.cabine}</div>
+          </div>
+          <div class="muted">${p.sintomas}</div>
+          <div class="mt-1">
+            <span class="me-3">BPM: <b>${p.bpm}</b></span>
+            <span class="me-3">SpO₂: <b>${p.spo2}%</b></span>
+            <span class="me-3">Temp: <b>${Number(p.temperatura).toFixed(2)}°C</b></span>
+            <span>PA: <b>${p.pressao_sys}/${p.pressao_dia}</b></span>
+          </div>
+          <div class="muted mt-1">${p.timestamp || ""} · ${p.ip_origem || ""}</div>
+        </div>
+      `;
+      lista.prepend(item);
+    }
+
+    socket.on("novo_paciente", (p) => {
+      renderCabine(p);
+      prependRecente(p);
+    });
+  </script>
+</body>
+</html>
