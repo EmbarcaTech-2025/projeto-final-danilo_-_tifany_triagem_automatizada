@@ -1,3 +1,8 @@
+# Ignore arquivos de build
 build
-.vscode/
 
+# Ignore arquivos vscode
+.vscode
+
+# Ignore arquivo gerado pelo macOS
+.DS_Store
