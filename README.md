@@ -170,17 +170,19 @@ Após a compilação, o arquivo `triagem.uf2` estará disponível dentro da past
 ![Protótipo final da cabine de triagem](./Assets/dashboard.jpeg)
 *Figura 3 – Dashboard exibindo dados do paciente em tempo real*
 
-### Relatório Final
-
-[**Clique aqui para ver documento detalhado do projeto\!**](./Etapa_4/Relatório%20Final.pdf)
-
 ### Demonstração em Vídeo
 
 [**Clique aqui para assistir ao vídeo do protótipo em funcionamento\!**](https://drive.google.com/drive/folders/1i_84O6hsd5oDjEaaV3iJG4wYRMZh1bOG?usp=sharing)
 
 -----
 
-## 8\. 📜 Licença
+## 8\. 📚 Relatório Final
+
+[**Clique aqui para ver documento detalhado do projeto\!**](./Etapa_4/Relatório%20Final.pdf)
+
+-----
+
+## 9\. 📜 Licença
 
 Este projeto foi desenvolvido para fins educacionais no âmbito do programa de Residência EmbarcaTech.
 
